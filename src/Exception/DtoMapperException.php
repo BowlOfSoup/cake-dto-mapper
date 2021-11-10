@@ -17,4 +17,9 @@ class DtoMapperException extends \Exception
     {
         return new static(sprintf('Class %s does not exist.', $className));
     }
+
+    public static function entityDoesNotImplementInterface(string $entityName): self
+    {
+        return new static(sprintf('Entity %s does not extend MapToDtoInterface', $entityName));
+    }
 }

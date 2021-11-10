@@ -41,6 +41,10 @@ class EntityToDtoMapper
             return null;
         }
 
+        if (!$entity instanceof MapToDtoInterface) {
+            throw DtoMapperException::entityDoesNotImplementInterface(get_class($entity));
+        }
+
         return static::mapInto($mapIntoDto, static::getProperties($entity));
     }
 
