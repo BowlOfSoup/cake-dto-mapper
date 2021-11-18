@@ -59,8 +59,8 @@ class EntityToDtoMapper
     {
         if (is_array($from)) {
             $properties = [];
-            foreach ($from as $value) {
-                $properties[] = static::getProperties($value);
+            foreach ($from as $key => $value) {
+                $properties[$key] = static::getProperties($value);
             }
 
             return $properties;
