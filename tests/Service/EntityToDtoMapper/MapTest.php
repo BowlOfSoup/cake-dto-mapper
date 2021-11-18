@@ -6,12 +6,12 @@ namespace BowlOfSoup\CakeDtoMapper\Tests\Service\EntityToDtoMapper;
 
 use BowlOfSoup\CakeDtoMapper\Exception\DtoMapperException;
 use BowlOfSoup\CakeDtoMapper\Service\EntityToDtoMapper;
+use BowlOfSoup\CakeDtoMapper\Tests\Asset\DtoSimple;
 use BowlOfSoup\CakeDtoMapper\Tests\Asset\DtoSub;
 use BowlOfSoup\CakeDtoMapper\Tests\Asset\DtoWithMultipleSub;
 use BowlOfSoup\CakeDtoMapper\Tests\Asset\DtoWithSingleSub;
-use BowlOfSoup\CakeDtoMapper\Tests\Asset\EntitySub;
-use BowlOfSoup\CakeDtoMapper\Tests\Asset\DtoSimple;
 use BowlOfSoup\CakeDtoMapper\Tests\Asset\EntitySimple;
+use BowlOfSoup\CakeDtoMapper\Tests\Asset\EntitySub;
 use PHPUnit\Framework\TestCase;
 
 class MapTest extends TestCase
@@ -27,6 +27,12 @@ class MapTest extends TestCase
         $entity->date_created = '2022-04-01 13:45';
         $entity->price = '2.50';
         $entity->stock = 65;
+        $entity->dimensions = [
+            'width' => 10,
+            'height' => 20,
+            'length' => 25,
+        ];
+        $entity->list = [1, 2, 3];
 
         /** @var DtoSimple $dtoSimple */
         $dtoSimple = EntityToDtoMapper::map($entity, DtoSimple::class);
@@ -36,9 +42,11 @@ class MapTest extends TestCase
         $this->assertSame($entity->date_created, $dtoSimple->date_created);
         $this->assertSame($entity->price, $dtoSimple->price);
         $this->assertSame($entity->stock, $dtoSimple->stock);
+        $this->assertSame($entity->dimensions, $dtoSimple->dimensions);
+        $this->assertSame($entity->dimensions, $dtoSimple->dimensions);
 
         $this->assertSame(
-            '{"id":123,"name":"Phone of Brand X","date_created":"2022-04-01 13:45","price":"2.50","stock":65}',
+            '{"id":123,"name":"Phone of Brand X","date_created":"2022-04-01 13:45","price":"2.50","stock":65,"dimensions":{"width":10,"height":20,"length":25},"list":[1,2,3]}',
             json_encode($dtoSimple)
         );
     }

@@ -15,4 +15,8 @@ class DtoSimple
     public $price;
 
     public $stock;
+
+    public $dimensions;
+
+    public $list;
 }
