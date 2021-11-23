@@ -99,7 +99,16 @@ class EntityToDtoMapper
                 continue;
             }
 
-            if (is_array($mapPropertyValue) && is_array($properties[$mapPropertyName])) {
+            if (is_array($mapPropertyValue)) {
+                // Multiple sub-classes implied in DTO.
+
+                if (!is_array($properties[$mapPropertyName])) {
+                    // Multiple sub-classes implied in DTO, but (from) property does not contain an array.
+                    $mapIntoClass->$mapPropertyName = [];
+
+                    continue;
+                }
+
                 // DTO property contains an array of sub-DTO's. Fill accordingly.
                 $dtoClass = reset($mapPropertyValue);
                 static::validateClassExists($dtoClass);
@@ -118,8 +127,11 @@ class EntityToDtoMapper
             }
 
             if (class_exists($mapPropertyValue)) {
-                // DTO property contains a SINGLE sub-DTO class. Fill accordingly.
-                $mapIntoClass->$mapPropertyName = static::mapInto($mapPropertyValue, $properties[$mapPropertyName]);
+                // Single sub-class implied in DTO. Fill accordingly (null values allowed).
+
+                $mapIntoClass->$mapPropertyName = null !== $properties[$mapPropertyName]
+                    ? static::mapInto($mapPropertyValue, $properties[$mapPropertyName])
+                    : null;
             }
         }
 

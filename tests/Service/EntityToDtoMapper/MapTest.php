@@ -121,4 +121,38 @@ class MapTest extends TestCase
             json_encode($dtoWithSingleSub)
         );
     }
+
+    public function testMapEntityWithSubEntityThatIsNull(): void
+    {
+        $entity = new EntitySimple();
+        $entity->id = 123;
+        $entity->name = 'Phone of Brand X';
+        $entity->stock = 65;
+        $entity->entity_sub = null;
+
+        /** @var DtoWithSingleSub $dtoWithSingleSub */
+        $dtoWithSingleSub = EntityToDtoMapper::map($entity, DtoWithSingleSub::class);
+
+        $this->assertSame(
+            '{"id":123,"name":"Phone of Brand X","stock":65,"entity_sub":null}',
+            json_encode($dtoWithSingleSub)
+        );
+    }
+
+    public function testMapEntityWithEmptyMultipleSubEntities(): void
+    {
+        $entity = new EntitySimple();
+        $entity->id = 123;
+        $entity->name = 'Phone of Brand X';
+        $entity->stock = 65;
+        $entity->entity_sub = null;
+
+        /** @var DtoWithSingleSub $dtoWithSingleSub */
+        $dtoWithSingleSub = EntityToDtoMapper::map($entity, DtoWithMultipleSub::class);
+
+        $this->assertSame(
+            '{"id":123,"name":"Phone of Brand X","stock":65,"entity_sub":[]}',
+            json_encode($dtoWithSingleSub)
+        );
+    }
 }
