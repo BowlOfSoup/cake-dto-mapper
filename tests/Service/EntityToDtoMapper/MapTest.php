@@ -155,4 +155,26 @@ class MapTest extends TestCase
             json_encode($dtoWithSingleSub)
         );
     }
+
+    public function testMapEntityWithANonExistingPropertyInSourceDataAccordingToGetProperties(): void
+    {
+        $entityMock = $this->createMock(EntitySimple::class);
+        $entityMock->expects($this->once())->method('getProperties')->willReturn([
+            'id' => 123,
+            'name' => 'Phone brand X',
+        ]);
+
+        $entityMock->stock = 65;
+
+        $dtoWithSingleSub = new DtoWithSingleSub();
+        $this->assertSame(DtoSub::class, $dtoWithSingleSub->entity_sub);
+
+        /** @var DtoWithSingleSub $dtoWithSingleSub */
+        $dto = EntityToDtoMapper::map($entityMock, DtoWithSingleSub::class);
+
+        $this->assertSame(123, $dto->id);
+        $this->assertSame('Phone brand X', $dto->name);
+        $this->assertNull($dto->stock);
+        $this->assertNull($dto->entity_sub);
+    }
 }

@@ -90,7 +90,11 @@ class EntityToDtoMapper
 
         $mapIntoClassProperties = get_object_vars($mapIntoClass);
         foreach ($mapIntoClassProperties as $mapPropertyName => $mapPropertyValue) {
-            static::validateDtoPropertyExistsInSourceProperties($mapPropertyName, $properties);
+            if (!array_key_exists($mapPropertyName, $properties)) {
+                $mapIntoClass->$mapPropertyName = null;
+
+                continue;
+            }
 
             if (null === $mapPropertyValue) {
                 // DTO property is empty, no special handling, just fill the DTO property.
@@ -136,21 +140,6 @@ class EntityToDtoMapper
         }
 
         return $mapIntoClass;
-    }
-
-    /**
-     * @param string $dtoPropertyName
-     * @param mixed $sourceProperties
-     *
-     * @throws DtoMapperException
-     */
-    private static function validateDtoPropertyExistsInSourceProperties(string $dtoPropertyName, $sourceProperties): void
-    {
-        if (!is_array($sourceProperties) || array_key_exists($dtoPropertyName, $sourceProperties)) {
-            return;
-        }
-
-        throw DtoMapperException::propertyDoesNotExistInSourceData($dtoPropertyName);
     }
 
     /**

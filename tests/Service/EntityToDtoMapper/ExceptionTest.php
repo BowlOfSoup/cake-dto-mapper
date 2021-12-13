@@ -6,22 +6,30 @@ namespace BowlOfSoup\CakeDtoMapper\Tests\Service\EntityToDtoMapper;
 
 use BowlOfSoup\CakeDtoMapper\Exception\DtoMapperException;
 use BowlOfSoup\CakeDtoMapper\Service\EntityToDtoMapper;
-use BowlOfSoup\CakeDtoMapper\Tests\Asset\DtoPropertyDoesNotExistException;
+use BowlOfSoup\CakeDtoMapper\Tests\Asset\DtoSimple;
+use BowlOfSoup\CakeDtoMapper\Tests\Asset\EntityNoInterface;
 use BowlOfSoup\CakeDtoMapper\Tests\Asset\EntitySimple;
 use PHPUnit\Framework\TestCase;
 
 class ExceptionTest extends TestCase
 {
-    public function testPropertyDoesNotExistInSourceEntity(): void
+    public function testEntityDoesNotExtendInterface(): void
     {
-        $entity = new EntitySimple();
-        $entity->id = 123;
-        $entity->name = 'Wooden table';
+        $entity = new EntityNoInterface();
 
         $this->expectException(DtoMapperException::class);
-        $this->expectExceptionMessage('Can\'t map to DTO property i_do_not_exist_in_entity: property does not exist in source data.');
+        $this->expectExceptionMessage('Entity BowlOfSoup\CakeDtoMapper\Tests\Asset\EntityNoInterface does not extend MapToDtoInterface');
 
-        /** @var DtoPropertyDoesNotExistException $dtoSimple */
-        $dtoSimple = EntityToDtoMapper::map($entity, DtoPropertyDoesNotExistException::class);
+        EntityToDtoMapper::map($entity, DtoSimple::class);
+    }
+
+    public function testTargetDtoDoesNotExist(): void
+    {
+        $entity = new EntitySimple();
+
+        $this->expectException(DtoMapperException::class);
+        $this->expectExceptionMessage('Class FooClass does not exist.');
+
+        EntityToDtoMapper::map($entity, 'FooClass');
     }
 }
