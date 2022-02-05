@@ -8,7 +8,11 @@
 
 ## Quick overview
 
-Converts a CakePHP entity into a DTO.
+Has two main functionalities:
+
+(1) Converts a CakePHP entity into a DTO; `EntityToDtoMapper`.
 
 Since CakePHP, by default, does not have actual properties on an entity,
 an interface must be implemented on the entity to ensure that `$this->_properties` is used.
+
+(2) Converts an associative array into a DTO; `ArrayToDtoMapper`.
