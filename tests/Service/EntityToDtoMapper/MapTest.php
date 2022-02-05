@@ -43,7 +43,6 @@ class MapTest extends TestCase
         $this->assertSame($entity->price, $dtoSimple->price);
         $this->assertSame($entity->stock, $dtoSimple->stock);
         $this->assertSame($entity->dimensions, $dtoSimple->dimensions);
-        $this->assertSame($entity->dimensions, $dtoSimple->dimensions);
 
         $this->assertSame(
             '{"id":123,"name":"Phone of Brand X","date_created":"2022-04-01 13:45","price":"2.50","stock":65,"dimensions":{"width":10,"height":20,"length":25},"list":[1,2,3]}',

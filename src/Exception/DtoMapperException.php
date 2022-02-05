@@ -20,6 +20,11 @@ class DtoMapperException extends \Exception
 
     public static function entityDoesNotImplementInterface(string $entityName): self
     {
-        return new static(sprintf('Entity %s does not extend MapToDtoInterface', $entityName));
+        return new static(sprintf('Entity %s does not extend MapToDtoInterface.', $entityName));
+    }
+
+    public static function valueIsNotAnAssociativeArray(): self
+    {
+        return new static('Value is not an associative array.');
     }
 }
